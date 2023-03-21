@@ -14,17 +14,32 @@ function postdata(){
     postData.innerHTML=null
     userpost.forEach((el) => {
         let div=document.createElement("div");
+        let div1=document.createElement("div");
         div.setAttribute("id","spost")
         let image=document.createElement("img");
         let title=document.createElement("p");
         let shortD=document.createElement("p");
         let category=document.createElement("p");
+        let edit=document.createElement("button");
+        let del=document.createElement("button");
+        edit.innerHTML="Edit";
+        del.innerHTML="Delete";
+        div1.append(edit,del)
+        del.addEventListener("click",()=>{
+            fetch(`${url}/${el.id}`,{
+                method:"DELETE"
+            })
+            .then(()=>{
+                alert("delete success")
+                postData()
+            })
+        })
         image.setAttribute("id","imgg")
         image.src=el.image;
         shortD.innerHTML=el.description;
         title.innerHTML=el.title;
         category.innerHTML=el.category
-        div.append(image,title,category,shortD);
+        div.append(image,title,category,shortD,div1);
         postData.append(div)
     });
     
@@ -78,6 +93,7 @@ document.getElementById("add_recipe").addEventListener("click", () => {
           })
             .then(() => {
               alert("Recipe Added Successful");
+              postdata();
               container.innerHTML = null;
             })
             .catch(() => {
